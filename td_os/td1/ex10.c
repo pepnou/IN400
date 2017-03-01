@@ -88,8 +88,8 @@ void which(char* fct_name)
 	
 	char** tab_dir = separe_chaine(path);
 	
-	int i,continuer,res;
-	i = 0;continuer = 1;res = 0;
+	int i,continuer;
+	i = 0;continuer = 1;
 	
 	DIR* repertoire;
 	struct dirent* xd;
@@ -97,14 +97,14 @@ void which(char* fct_name)
 	while((continuer == 1)&&(tab_dir[i][0] != ':'))
 	{
 		repertoire = opendir(tab_dir[i]);
-		if(strcmp(tab_dir[i],"/usr/local/games\"") != 0)xd = readdir(repertoire);
+		if((strcmp(tab_dir[i],"/usr/local/games\"")&&(repertoire != NULL)) != 0)xd = readdir(repertoire);
 		else xd = NULL;
 		
 		while(xd != NULL)
 		{
 			if(strcmp(xd -> d_name,fct_name) == 0)
 			{
-				continuer = 0;res = 1;
+				continuer = 0;
 				printf("%s se trouve dans %s\n",fct_name,tab_dir[i]);
 			}
 			xd = readdir(repertoire);
@@ -114,7 +114,7 @@ void which(char* fct_name)
 		
 		i++;
 	}
-	if(res == 0)printf("%s ne se trouve dans aucun des repertoires cités par PATH\n",fct_name);
+	if(continuer == 1)printf("%s ne se trouve dans aucun des repertoires cités par PATH\n",fct_name);
 }
 
 int main(int argc,char** argv)
