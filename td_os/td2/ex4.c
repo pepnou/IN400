@@ -5,10 +5,10 @@
 
 int main(int argc,char** argv)
 {
-	struct tms yolo;
+	struct tms tmp;
 	
-	float temps_d;
-	float temps_f;
+	double temps_d;
+	double temps_f;
 	
 	if(argc == 1)exit(0);
 	
@@ -22,16 +22,16 @@ int main(int argc,char** argv)
 	strcpy(commande2,commande1);
 	strcat(commande2," > /dev/null");
 	
-	times(&yolo);
+	times(&tmp);
 	
-	temps_d = yolo.tms_utime;
+	temps_d = tmp.tms_utime;
 	
 	system(commande1);
 	//system(commande2);
 	
-	times(&yolo);
+	times(&tmp);
 	
-	temps_f = yolo.tms_utime;
+	temps_f = tmp.tms_utime;
 	
 	printf("%f\n",temps_f - temps_d);
 	
