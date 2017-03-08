@@ -8,26 +8,29 @@
 
 int main(int argc, char** argv)
 {
-	int pid[nbr_process];
+	int tmp,pid;
 	int return_value;
 	int i;
 	
-	for(i=0;i<nbr_process;i++) pid[i] = fork();
-	
-	for(i=0;i<nbr_process;i++)
+	for(i=1;i<=nbr_process;i++)
 	{
-		if(pid[i] == -1) exit(-1);
-		
-		else if(pid[i] == 0)
+		pid = fork();
+		if(pid == -1)exit(0);
+		if(pid == 0)break;
+	}
+	
+	if(pid == 0)
+	{
+		exit(getpid() % 10);
+	}
+	
+	else
+	{
+		for(i=0;i<nbr_process;i++)
 		{
-			exit(pid[i] % 10);
-		}
-		
-		else
-		{
-			wait(&return_value);
+			tmp = wait(&return_value);
 			
-			printf("pid fils %d : %d\n",i,pid[i]);
+			printf("pid fils : %d\n",tmp);
 			printf("return_value : %d\n",WEXITSTATUS(return_value));
 		}
 	}
