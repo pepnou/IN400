@@ -2,13 +2,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/times.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 int main(int argc,char** argv)
 {
+	int pid;
 	struct tms tmp;
-	
-	double temps_d;
-	double temps_f;
+	int status;
 	
 	if(argc == 1)exit(0);
 	
@@ -22,18 +23,19 @@ int main(int argc,char** argv)
 	strcpy(commande2,commande1);
 	strcat(commande2," > /dev/null");
 	
-	times(&tmp);
-	
-	temps_d = tmp.tms_utime;
-	
-	system(commande1);
-	//system(commande2);
-	
-	times(&tmp);
-	
-	temps_f = tmp.tms_utime;
-	
-	printf("%f\n",temps_f - temps_d);
+	pid = fork();
+	if(pid == -1)exit(0);
+	else if(pid == 0)
+	{
+		//system(commande1);
+		system(commande2);
+	}
+	else
+	{
+		wait(&status);
+		times(&tmp);
+		printf("%f\n",tmp.tms_cutime);
+	}
 	
 	exit(0);
 }
