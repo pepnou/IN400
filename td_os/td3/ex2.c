@@ -54,5 +54,12 @@ int main()
 	
 	for(i=0;i<nbr_thread;i++) pthread_join(tid[i],NULL);
 	
+	for(i=0;i<=nbr_thread;i++)
+	{
+		if(info[i].max > res) res = info[i].max;
+	}
+	
+	printf("max : %d\n",res);
+	
 	return 0;
 }
