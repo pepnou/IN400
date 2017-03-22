@@ -18,9 +18,7 @@ void* max(void* arg)
 	int i;
 	
 	for(i = a -> deb;i < a -> fin;i++)
-	{
 		if(a->tab[i] > a->max)a->max = a->tab[i];
-	}
 	
 	return NULL;
 }
@@ -37,10 +35,12 @@ int main()
 	
 	for(i=0;i<nbr_thread;i++)
 	{
-		info[i].deb = i * nbr_case / nbr_thread;
-		info[i].fin = (i + 1 ) * nbr_case / nbr_thread;
+		info[i].deb = i * (int)(nbr_case / nbr_thread);
+		info[i].fin = (i + 1 ) * (int)(nbr_case / nbr_thread);
 		info[i].max = 0;
 		info[i].tab = alea;
+		
+		//printf("deb : %d ; fin : %d ;\n",info[i].deb,info[i].fin);
 		
 		pthread_create(&tid[i],NULL,max,&info[i]);
 	}
@@ -49,6 +49,8 @@ int main()
 	info[i].fin = nbr_case - 1;
 	info[i].max = 0;
 	info[i].tab = alea;
+	
+	//printf("deb : %d ; fin : %d ;\n",info[i].deb,info[i].fin);
 	
 	max(&info[i]);
 	
