@@ -332,21 +332,21 @@ void deplacement_ecran()
 					case SDL_BUTTON_WHEELDOWN:
 						if(zoom < z_lvl_max -1)
 						{
-							printf("position.x : %d\n",position.x);
-							printf("position.y : %d\n",position.y);
-							printf("event.button.x : %d\n",event.button.x);
-							printf("event.button.y : %d\n",event.button.y);
-							printf("zoom_a : %d\n",zoom);
-							printf("division par rapport a la taille de base _a : %d\n",zoom+1);
+							//~ printf("position.x : %d\n",position.x);
+							//~ printf("position.y : %d\n",position.y);
+							//~ printf("event.button.x : %d\n",event.button.x);
+							//~ printf("event.button.y : %d\n",event.button.y);
+							//~ printf("zoom_a : %d\n",zoom);
+							//~ printf("division par rapport a la taille de base _a : %d\n",zoom+1);
 							
 							zoom++;
 							
-							printf("zoom_b : %d\n",zoom);
-							printf("division par rapport a la taille de base _b : %d\n",zoom+1);
-							printf("event.button.x nouveau ref : %d\n",event.button.x*(zoom+1)/(zoom+2));
-							printf("event.button.y nouveau ref : %d\n",event.button.y*(zoom+1)/(zoom+2));
-							printf("x a ajouter pour retourner a event.button.x : %d\n",event.button.x - (event.button.x - position.x)*(zoom+1)/(zoom+2));
-							printf("y a ajouter pour retourner a event.button.y : %d\n",event.button.y - (event.button.y - position.y)*(zoom+1)/(zoom+2));
+							//~ printf("zoom_b : %d\n",zoom);
+							//~ printf("division par rapport a la taille de base _b : %d\n",zoom+1);
+							//~ printf("event.button.x nouveau ref : %d\n",event.button.x*(zoom+1)/(zoom+2));
+							//~ printf("event.button.y nouveau ref : %d\n",event.button.y*(zoom+1)/(zoom+2));
+							//~ printf("x a ajouter pour retourner a event.button.x : %d\n",event.button.x - (event.button.x - position.x)*(zoom+1)/(zoom+2));
+							//~ printf("y a ajouter pour retourner a event.button.y : %d\n",event.button.y - (event.button.y - position.y)*(zoom+1)/(zoom+2));
 							
 							
 							//~ position.x = event.button.x - event.button.x*(zoom+1)/(zoom+2);
@@ -355,8 +355,20 @@ void deplacement_ecran()
 							//position.x = event.button.x - (event.button.x - position.x)*(zoom+1)/(zoom+2);
 							//position.y = event.button.y - (event.button.y - position.y)*(zoom+1)/(zoom+2);
 							
-							//position.x = (-1)*((event.button.x - position.x) * (zoom + 1) / (zoom + 2) - event.button.x);
-							//position.y = (-1)*((event.button.y - position.y) * (zoom + 1) / (zoom + 2) - event.button.y);
+							printf("%d\n",event.button.x);
+							printf("%d\n",event.button.y);
+							printf("%d\n",(event.button.x - position.x) * (zoom + 1) / (zoom + 2));
+							printf("%d\n",(event.button.y - position.y) * (zoom + 1) / (zoom + 2));
+							printf("%d\n",(-1)*((event.button.x - position.x) * (zoom + 1) / (zoom + 2) - event.button.x));
+							printf("%d\n",(-1)*((event.button.y - position.y) * (zoom + 1) / (zoom + 2) - event.button.y));
+							
+							position.x = (-1)*((event.button.x - position.x) * (zoom + 1) / (zoom + 2) - event.button.x);
+							position.y = (-1)*((event.button.y - position.y) * (zoom + 1) / (zoom + 2) - event.button.y);
+							
+							if(position.x > 0)position.x = 0;
+							if(position.x < -(image_z[zoom]->w - ecran -> w))position.x = -(image_z[zoom]->w - ecran -> w);
+							if(position.y > 0)position.y = 0;
+							if(position.y < -(image_z[zoom]->h - ecran -> h))position.y = -(image_z[zoom]->h - ecran -> h);
 							
 							position_copie.x = position.x; position_copie.y = position.y;
 							SDL_BlitSurface(image_z[zoom],NULL,ecran,&position);
