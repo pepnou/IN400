@@ -287,7 +287,7 @@ void deplacement_ecran()
 	SDL_Flip(ecran);
 	
 	SDL_Event event;
-	int continuer = 1,continuer_2 = 1,zoom = z_lvl_max;
+	int continuer = 1,continuer_2 = 1,zoom = z_lvl_max - 1;
 	int x_ini,y_ini;
 	
 	while(continuer)
@@ -301,23 +301,66 @@ void deplacement_ecran()
 					case SDL_BUTTON_WHEELUP:
 						if(zoom > 0)
 						{
-							//position.x = (event.button.x * (zoom+1) / (zoom)) - ecran ->w; position.y = (event.button.y * (zoom+1) / (zoom)) - ecran ->h;
-							//position.x = (event.button.x * (zoom + 1) / (zoom - 0)) - (image_z[zoom - 1]->w / 2); position.y = (event.button.y * (zoom + 1) / (zoom - 0)) - (image_z[zoom - 1]->h / 2);
-							//position.x = (-1)*(event.button.x * (zoom + 1) / (zoom - 0)); position.y = (-1)*(event.button.y * (zoom + 1) / (zoom - 0));
-							position.x = (-1)*(event.button.x * (zoom + 1) / (zoom - 0)); position.y = (-1)*(event.button.y * (zoom + 1) / (zoom - 0));
+							//~ printf("position.x : %d\n",position.x);
+							//~ printf("position.y : %d\n",position.y);
+							//~ printf("event.button.x : %d\n",event.button.x);
+							//~ printf("event.button.y : %d\n",event.button.y);
+							//~ printf("zoom_a : %d\n",zoom);
+							//~ printf("division par rapport a la taille de base _a : %d\n",zoom+1);
 							
 							zoom--;
 							
+							//~ printf("zoom_b : %d\n",zoom);
+							//~ printf("division par rapport a la taille de base _b : %d\n",zoom+1);
+							//~ printf("event.button.x nouveau ref : %d\n",event.button.x*(zoom+2)/(zoom+1));
+							//~ printf("event.button.y nouveau ref : %d\n",event.button.y*(zoom+2)/(zoom+1));
+							//~ printf("x a enlever pour retourner a event.button.x : %d\n",event.button.x*(zoom+2)/(zoom+1) - event.button.x);
+							//~ printf("y a enlever pour retourner a event.button.y : %d\n",event.button.y*(zoom+2)/(zoom+1) - event.button.y);
+							
+							position.x = -((event.button.x - position.x)*(zoom+2)/(zoom+1) - event.button.x);
+							position.y = -((event.button.y - position.y)*(zoom+2)/(zoom+1) - event.button.y);
+							
+							position_copie.x = position.x; position_copie.y = position.y;
 							SDL_BlitSurface(image_z[zoom],NULL,ecran,&position);
+							position.x = position_copie.x; position.y = position_copie.y;
 		
 							SDL_Flip(ecran);
+							
+							//printf("\n");
 						}
 						break;
 					case SDL_BUTTON_WHEELDOWN:
 						if(zoom < z_lvl_max -1)
 						{
+							printf("position.x : %d\n",position.x);
+							printf("position.y : %d\n",position.y);
+							printf("event.button.x : %d\n",event.button.x);
+							printf("event.button.y : %d\n",event.button.y);
+							printf("zoom_a : %d\n",zoom);
+							printf("division par rapport a la taille de base _a : %d\n",zoom+1);
+							
 							zoom++;
+							
+							printf("zoom_b : %d\n",zoom);
+							printf("division par rapport a la taille de base _b : %d\n",zoom+1);
+							printf("event.button.x nouveau ref : %d\n",event.button.x*(zoom+1)/(zoom+2));
+							printf("event.button.y nouveau ref : %d\n",event.button.y*(zoom+1)/(zoom+2));
+							printf("x a ajouter pour retourner a event.button.x : %d\n",event.button.x - (event.button.x - position.x)*(zoom+1)/(zoom+2));
+							printf("y a ajouter pour retourner a event.button.y : %d\n",event.button.y - (event.button.y - position.y)*(zoom+1)/(zoom+2));
+							
+							
+							//~ position.x = event.button.x - event.button.x*(zoom+1)/(zoom+2);
+							//~ position.y = event.button.y - event.button.y*(zoom+1)/(zoom+2);
+							
+							//position.x = event.button.x - (event.button.x - position.x)*(zoom+1)/(zoom+2);
+							//position.y = event.button.y - (event.button.y - position.y)*(zoom+1)/(zoom+2);
+							
+							//position.x = (-1)*((event.button.x - position.x) * (zoom + 1) / (zoom + 2) - event.button.x);
+							//position.y = (-1)*((event.button.y - position.y) * (zoom + 1) / (zoom + 2) - event.button.y);
+							
+							position_copie.x = position.x; position_copie.y = position.y;
 							SDL_BlitSurface(image_z[zoom],NULL,ecran,&position);
+							position.x = position_copie.x; position.y = position_copie.y;
 		
 							SDL_Flip(ecran);
 						}
