@@ -255,11 +255,116 @@ void test_vf(int recouvrement)
 	SDL_Quit();
 }
 
+void deplacement_ecran()
+{
+	SDL_Init(SDL_INIT_VIDEO);
+	
+	const SDL_VideoInfo* info = SDL_GetVideoInfo();
+	int resolution_x = info -> current_w;
+	int resolution_y = info -> current_h;
+	
+	SDL_Surface* image = SDL_LoadBMP("plan-metro-paris-2017.bmp");
+	SDL_Surface* ecran;
+	
+	int z_lvl_max = 1,recouvrement = 0;
+	while((((image->w/(z_lvl_max-recouvrement))+(image->w%(z_lvl_max-recouvrement) != 0)) > resolution_x)||(((image->h/(z_lvl_max-recouvrement))+(image->h%(z_lvl_max-recouvrement) != 0)) > resolution_y)) z_lvl_max++;
+	
+	SDL_Surface* image_z[z_lvl_max];
+	
+	int i;
+	
+	for(i=0;i<z_lvl_max;i++)
+	{
+		image_z[i] = dezoom_vf(image,i+1,0);
+	}
+	
+	ecran = SDL_SetVideoMode(image_z[z_lvl_max - 1]->w,image_z[z_lvl_max - 1]->h,32,SDL_HWSURFACE);
+	
+	SDL_Rect position;position.x=0;position.y=0;
+	
+	SDL_BlitSurface(image_z[z_lvl_max - 1],NULL,ecran,&position);
+		
+	SDL_Flip(ecran);
+	
+	SDL_Event event;
+	int continuer = 1,continuer_2 = 1,zoom = z_lvl_max;
+	int x_ini,y_ini;
+	
+	while(continuer)
+	{
+		SDL_WaitEvent(&event);
+		switch(event.type)
+		{
+			case SDL_MOUSEBUTTONUP:
+				switch(event.button.button)
+				{
+					case SDL_BUTTON_WHEELUP:
+						if(zoom > 0)
+						{
+							zoom--;
+							SDL_BlitSurface(image_z[zoom],NULL,ecran,&position);
+		
+							SDL_Flip(ecran);
+						}
+						break;
+					case SDL_BUTTON_WHEELDOWN:
+						if(zoom < z_lvl_max -1)
+						{
+							zoom++;
+							SDL_BlitSurface(image_z[zoom],NULL,ecran,&position);
+		
+							SDL_Flip(ecran);
+						}
+						break;
+				}
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				if(event.button.button == SDL_BUTTON_RIGHT)
+				{					
+					x_ini = event.button.x; y_ini = event.button.y;
+					while(continuer_2)
+					{
+						printf(" 3 : %d %d\n",position.x,position.y);
+						SDL_WaitEvent(&event);
+						switch(event.type)
+						{
+							case SDL_MOUSEMOTION:
+								if((position.x+event.motion.x-x_ini <= 0)&&(position.x+event.motion.x-x_ini > (-1)*(image_z[zoom]->w - ecran ->w))&&(position.y+event.motion.y-y_ini <= 0)&&(position.y+event.motion.y-y_ini > (-1)*(image_z[zoom]->h - ecran ->h)))
+								{
+									position.x += (event.motion.x - x_ini); position.y += (event.motion.y - y_ini);
+									printf(" 1 : %d %d\n",position.x,position.y);
+									
+									SDL_BlitSurface(image_z[zoom],NULL,ecran,&position);
+									SDL_Flip(ecran);
+								}
+								break;
+							case SDL_MOUSEBUTTONUP:
+								if(event.button.button == SDL_BUTTON_RIGHT)
+								{
+									continuer_2 = 0;
+									printf(" 2 : %d %d\n",position.x,position.y);
+								}
+								break;
+						}
+					}
+					continuer_2 = 1;
+				}
+				break;
+			case SDL_QUIT:
+				continuer = 0;
+				break;
+		}
+	}
+	
+}
+
 int main()
 {
 	//test_v1();
 	//test_v2();
-	test_vf(2);
+	//test_vf(0);
+	
+	deplacement_ecran();
 	
 	return 0;
 }
