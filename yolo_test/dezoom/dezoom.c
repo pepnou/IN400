@@ -280,7 +280,7 @@ void deplacement_ecran()
 	
 	ecran = SDL_SetVideoMode(image_z[z_lvl_max - 1]->w,image_z[z_lvl_max - 1]->h,32,SDL_HWSURFACE);
 	
-	SDL_Rect position;position.x=0;position.y=0;
+	SDL_Rect position,position_copie,position_copie2;position.x=0;position.y=0;
 	
 	SDL_BlitSurface(image_z[z_lvl_max - 1],NULL,ecran,&position);
 		
@@ -324,7 +324,6 @@ void deplacement_ecran()
 					x_ini = event.button.x; y_ini = event.button.y;
 					while(continuer_2)
 					{
-						printf(" 3 : %d %d\n",position.x,position.y);
 						SDL_WaitEvent(&event);
 						switch(event.type)
 						{
@@ -332,17 +331,21 @@ void deplacement_ecran()
 								if((position.x+event.motion.x-x_ini <= 0)&&(position.x+event.motion.x-x_ini > (-1)*(image_z[zoom]->w - ecran ->w))&&(position.y+event.motion.y-y_ini <= 0)&&(position.y+event.motion.y-y_ini > (-1)*(image_z[zoom]->h - ecran ->h)))
 								{
 									position.x += (event.motion.x - x_ini); position.y += (event.motion.y - y_ini);
-									printf(" 1 : %d %d\n",position.x,position.y);
-									
+									position_copie.x = position.x; position_copie.y = position.y;
+																		
 									SDL_BlitSurface(image_z[zoom],NULL,ecran,&position);
+									
+									position.x = position_copie.x; position.y = position_copie.y;
+									x_ini = event.motion.x; y_ini = event.motion.y;
+																		
 									SDL_Flip(ecran);
+									
 								}
 								break;
 							case SDL_MOUSEBUTTONUP:
 								if(event.button.button == SDL_BUTTON_RIGHT)
 								{
 									continuer_2 = 0;
-									printf(" 2 : %d %d\n",position.x,position.y);
 								}
 								break;
 						}
