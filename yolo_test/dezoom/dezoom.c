@@ -301,7 +301,13 @@ void deplacement_ecran()
 					case SDL_BUTTON_WHEELUP:
 						if(zoom > 0)
 						{
+							//position.x = (event.button.x * (zoom+1) / (zoom)) - ecran ->w; position.y = (event.button.y * (zoom+1) / (zoom)) - ecran ->h;
+							//position.x = (event.button.x * (zoom + 1) / (zoom - 0)) - (image_z[zoom - 1]->w / 2); position.y = (event.button.y * (zoom + 1) / (zoom - 0)) - (image_z[zoom - 1]->h / 2);
+							//position.x = (-1)*(event.button.x * (zoom + 1) / (zoom - 0)); position.y = (-1)*(event.button.y * (zoom + 1) / (zoom - 0));
+							position.x = (-1)*(event.button.x * (zoom + 1) / (zoom - 0)); position.y = (-1)*(event.button.y * (zoom + 1) / (zoom - 0));
+							
 							zoom--;
+							
 							SDL_BlitSurface(image_z[zoom],NULL,ecran,&position);
 		
 							SDL_Flip(ecran);
