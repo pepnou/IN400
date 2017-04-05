@@ -13,6 +13,7 @@ int twait = 0;
 
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mutex2 = PTHREAD_MUTEX_INITIALIZER;
 
 void* barrier(void* a)
 {
@@ -27,7 +28,11 @@ void* barrier(void* a)
 
 void* threadA(void* a)
 {
-	sleep(rand()%10+1);
+	pthread_mutex_lock(&mutex2);
+	int temps = rand()%10+1;
+	pthread_mutex_unlock(&mutex2);
+	
+	sleep(temps);
 	
 	barrier(NULL);
 	
