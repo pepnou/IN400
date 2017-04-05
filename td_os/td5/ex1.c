@@ -9,7 +9,7 @@
 
 int main()
 {
-	char xd[] = "mais oui c est clai\' c est la congolexicomatisation des lois du ma\'che";
+	char xd[] = "\nmais oui c est clai\' c est la congolexicomatisation des lois du ma\'che";
 	int pipefd[2];
 	char buf[1024];
 	
@@ -25,7 +25,6 @@ int main()
 		read(pipefd[0],buf,1024*sizeof(char));
 		printf("%s\n",buf);
 		close(pipefd[0]);
-		
 	}
 	
 	else
