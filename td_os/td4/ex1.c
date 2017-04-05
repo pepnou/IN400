@@ -25,7 +25,7 @@ void* barrier(void* a)
 	return NULL;
 }
 
-void* thread(void* a)
+void* threadA(void* a)
 {
 	sleep(rand()%10+1);
 	
@@ -39,17 +39,19 @@ int main()
 	srand(time(NULL));
 	
 	int i;
-	pthread_t tid[nthreads];
+	pthread_t tid[nthreads-1];
 	
-	for(i=0;i<nthreads;i++)
+	for(i=0;i<nthreads-1;i++)
 	{
 		pthread_create(&tid[i],NULL,barrier,NULL);
 	}
 	
-	for(i=0;i<nthreads;i++)
+	for(i=0;i<nthreads-1;i++)
 	{
 		pthread_join(tid[i],NULL);
 	}
+	
+	barrier(NULL);
 	
 	exit(EXIT_SUCCESS);
 } 
