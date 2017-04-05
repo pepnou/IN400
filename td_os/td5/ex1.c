@@ -13,7 +13,7 @@ int main()
 	int pipefd[2];
 	char buf[1024];
 	
-	if(!pipe(pipefd))exit(EXIT_FAILURE);
+	if(pipe(pipefd) == -1)exit(EXIT_FAILURE);
 	int pid = fork();
 	
 	if(pid == -1)exit(EXIT_FAILURE);
@@ -25,6 +25,7 @@ int main()
 		read(pipefd[0],buf,1024*sizeof(char));
 		printf("%s\n",buf);
 		close(pipefd[0]);
+		
 	}
 	
 	else
@@ -36,3 +37,6 @@ int main()
 	
 	exit(EXIT_SUCCESS);
 }
+
+
+
