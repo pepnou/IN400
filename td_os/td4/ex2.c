@@ -17,6 +17,13 @@ typedef struct
 	int valeur;
 }mailbox;
 
+typedef struct
+{
+	mailbox* mb1,mb2;
+	int m;
+	pthread_t tid;
+}argument;
+
 void mbox_init(mailbox* mb)
 {
 	mb -> mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -58,6 +65,19 @@ int mbox_read(mailbox* mb)
 
 int main(int argc, char** argv)
 {
+	argument arg[argv[1]];
+	
+	int i;
+	
+	for(i=0;i<n;i++)
+	{
+		arg[i].m = argv[2];
+		if(i != 0)arg[i].mb1 = arg[i-1].mb2;
+		else mbox_init(arg[i].mb1);
+		mbox_init(arg[i].mb2);
+		
+		pthread_create(&(arg[i].tid),NULL,OP_thread,&(arg[i]));
+	}
 	
 	
 	
