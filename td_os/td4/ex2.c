@@ -26,8 +26,10 @@ typedef struct
 
 void mbox_init(mailbox* mb)
 {
-	mb -> mutex = PTHREAD_MUTEX_INITIALIZER;
-	mb -> cond = PTHREAD_COND_INITIALIZER;
+	//mb -> mutex = PTHREAD_MUTEX_INITIALIZER;
+	pthread_mutex_init(&(mb -> mutex), NULL);
+	//mb -> cond = PTHREAD_COND_INITIALIZER;
+	pthread_cond_init(&(mb -> cond), NULL);
 	mb -> remplie = 0;
 }
 
