@@ -63,6 +63,12 @@ int mbox_read(mailbox* mb)
 	return res;
 }
 
+void* OP_thread(void* a)
+{
+	argument arg = *((argument*)a);
+	
+}
+
 int main(int argc, char** argv)
 {
 	argument arg[argv[1]];
@@ -79,8 +85,19 @@ int main(int argc, char** argv)
 		pthread_create(&(arg[i].tid),NULL,OP_thread,&(arg[i]));
 	}
 	
+	for(i=0;i<m;i++)
+	{
+		mbox_write(&(arg[0].mb1),i);
+		printf("%d\n",mbox_read(&(arg[n-1].mb2)));
+	}
 	
+	for(i=0;i<n;i++)
+	{
+		pthread_join(arg[i].tid,NULL);
+	}
 	
 	exit(0);
 }
+
+
 
