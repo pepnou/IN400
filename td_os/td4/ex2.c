@@ -28,7 +28,12 @@ void mbox_write(mailbox* mb, int i)
 {
 	pthread_mutex_lock(&(mb -> mutex));
 	
-	if(mb -> remplie != 0) pthread_cond_wait(&(mb -> mutex),&(mb -> cond))
+	if(mb -> remplie != 0) pthread_cond_wait(&(mb -> mutex),&(mb -> cond));
+	
+	mb -> valeur = i;
+	mb -> remplie = 1;
+	
+	pthread_cond_signal(&(mb -> cond));
 	
 	pthread_mutex_unlock(&(mb -> mutex));
 }
@@ -37,12 +42,21 @@ int mbox_read(mailbox* mb)
 {
 	int res;
 	
+	pthread_mutex_lock(&(mb -> mutex));
 	
+	if(mb -> remplie == 0) pthread_cond_wait(&(mb -> mutex),&(mb -> cond));
+	
+	res = mb -> valeur;
+	mb -> remplie = 0;
+	
+	pthread_cond_signal(&(mb -> cond));
+	
+	pthread_mutex_unlock(&(mb -> mutex));
 	
 	return res;
 }
 
-int main()
+int main(int argc, char** argv)
 {
 	
 	
