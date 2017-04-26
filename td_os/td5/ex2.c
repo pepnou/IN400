@@ -47,7 +47,7 @@ void transmission(int pipel, int n)
 		transmission(pipefd[0],n);
 		//~ read(pipefd[0],buf,1024*sizeof(char));
 		close(pipefd[0]);
-		exit(0);
+		exit(0); 
 	}
 	
 }
